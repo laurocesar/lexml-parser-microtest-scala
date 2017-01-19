@@ -14,7 +14,7 @@ import br.gov.lexml.parser.pl.errors.ParseProblem
 object App extends App {
 
   val profile = HelperProfile.profileBySigla("PRT")
-  val inTXT = HelperIO.conteudoLei("LeiNumeroLetra.txt")
+  val inTXT = HelperIO.conteudoLei("PRT834-2016.txt")
   val txt = scala.io.Source.fromInputStream(inTXT).getLines().toList
   val metadado = Metadado(profile, hashFonte = None)
   
