@@ -11,6 +11,13 @@ import br.gov.lexml.parser.pl.errors.ParseProblem
 import br.gov.lexml.parser.pl.metadado.Metadado
 import br.gov.lexml.parser.pl.output.LexmlRenderer
 import br.gov.lexml.parser.pl.validation.Validation
+import br.gov.lexml.parser.pl.block.Unrecognized
+import br.gov.lexml.parser.pl.block.Image
+import br.gov.lexml.parser.pl.block.OL
+import br.gov.lexml.parser.pl.block.Dispositivo
+import br.gov.lexml.parser.pl.block.Alteracao
+import br.gov.lexml.parser.pl.block.Omissis
+import br.gov.lexml.parser.pl.block.Table
 
 object App extends App {
 
@@ -32,6 +39,10 @@ object App extends App {
   
   println("Articulacao Validation:")
   Validation.validaEstrutura(articulacao).foreach { printParseProblem }
+  
+  println
+  println("Match em articulacao:")
+  MatchArticulacao.blocksString(articulacao).foreach(println)  
 
   def printParseProblem(x: ParseProblem) = {
     println ("msg: " + x.msg
