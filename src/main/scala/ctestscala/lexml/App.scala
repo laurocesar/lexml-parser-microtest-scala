@@ -5,37 +5,35 @@ import java.io.InputStream
 import scala.xml.Text
 
 import br.gov.lexml.parser.pl.ProjetoLeiParser
+import br.gov.lexml.parser.pl.block.Block
 import br.gov.lexml.parser.pl.block.Paragraph
-import br.gov.lexml.parser.pl.output.LexmlRenderer
-import br.gov.lexml.parser.pl.metadado.Metadado
-import br.gov.lexml.parser.pl.ProjetoLei
 import br.gov.lexml.parser.pl.errors.ParseProblem
+import br.gov.lexml.parser.pl.metadado.Metadado
+import br.gov.lexml.parser.pl.output.LexmlRenderer
+import br.gov.lexml.parser.pl.validation.Validation
 
 object App extends App {
 
-  val profile = HelperProfile.profileBySigla("PRT")
-  val inTXT = HelperIO.conteudoLei("PRT834-2016.txt")
+  val inTXT = HelperIO.conteudoLei("PRT834-2016-Validation.txt")
   val txt = scala.io.Source.fromInputStream(inTXT).getLines().toList
+  val txtParagraphList = txt.map(x=> Paragraph(Seq(Text(x))))
+
+  val profile = HelperProfile.profileBySigla("PRT")
   val metadado = Metadado(profile, hashFonte = None)
   
   val parser = new ProjetoLeiParser(profile)
   
   
-  
   //executa o parser e obtem a articulação
-  val articulacao = parser.parseArticulacao(txt.map(
-      x=> Paragraph(Seq(Text(x)))), false)
-  // imprime xml da articulação
-  println ( LexmlRenderer.renderArticulacao(articulacao).toString )    
+  val articulacao : List[Block] = parser.parseArticulacao(txtParagraphList, false)
   
+  //imprime xml da articulação
+  println ( LexmlRenderer.renderArticulacao(articulacao).toString )
   
-  
-  //obtem a estrutura completa, inclusive a lista de problemas do validation
-  val parserRet : (Option[ProjetoLei], List[ParseProblem]) = parser.fromBlocks(metadado, articulacao)
-  
-  println
-  println("Problemas encontrados:")
-  parserRet._2.foreach { x => 
+  println("Articulacao Validation:")
+  Validation.validaEstrutura(articulacao).foreach { printParseProblem }
+
+  def printParseProblem(x: ParseProblem) = {
     println ("msg: " + x.msg
         + "; posição: " + x.pos.mkString(" ")
         + "; Categoria: " + x.problemType.category.code + " - "+ x.problemType.category.description
@@ -57,6 +55,8 @@ object HelperProfile {
   import br.gov.lexml.parser.pl.profile.FederalProfile
   import br.gov.lexml.parser.pl.profile.Lei
   import br.gov.lexml.parser.pl.profile.LeiComplementar
+  import br.gov.lexml.parser.pl.profile.ProjetoDeLeiDoSenadoNoSenado
+
 
   // 
   object Portaria extends DocumentProfile with DefaultRegexProfile with FederalProfile with EpigrafeOpcional {
@@ -73,6 +73,8 @@ object HelperProfile {
     case "LEI" => Lei
     case "DEC" => Decreto
     case "LC" => LeiComplementar
+    case "PLS" => ProjetoDeLeiDoSenadoNoSenado
+    case _ => ProjetoDeLeiDoSenadoNoSenado
   }
 
 }

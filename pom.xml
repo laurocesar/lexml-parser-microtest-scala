@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>br.gov.lexml.parser.pl</groupId>
 			<artifactId>lexml-parser-projeto-lei</artifactId>
-			<version>1.10.3</version>
+			<version>1.10.4-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.logging.log4j</groupId>
@@ -44,6 +44,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.22</version>
 		</dependency>
 
 	</dependencies>
