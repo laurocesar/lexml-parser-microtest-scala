@@ -16,13 +16,13 @@ object MatchArticulacao {
     
   private def blockString(b : Block): String = b match {
       case e: Unrecognized =>      "Unrecognized: " + e + printChildren(e) 
-      case e: Alteracao =>         "Alteracao: "    + e + printChildren(e)
+      case e: Alteracao =>         "Alteracao: "    + e + printChildren(e); 
       case e: Table =>             "Table: "        + e + printChildren(e)
       case e: OL =>                "OrderedList: "  + e + printChildren(e)
       case e: Omissis =>           "Omissis: "      + e + printChildren(e)
-      case e: Dispositivo =>       "Dispositivo: "  + e + printChildren(e) + "          \n" + e.subDispositivos.map(blockString).mkString("          \n")
+      case e: Dispositivo =>       "Dispositivo: (nota: "  + e.notaAlteracao + ")" + e + printChildren(e) + "          \n" + e.subDispositivos.map(blockString).mkString("          \n") 
       case e: Paragraph =>         "Paragraph: "    + e + printChildren(e)
-      case _ => "Possible match for Block, Image..."
+      case _ =>  "Possible match for Block, Image..."
   }
   
   private def printChildren(e: Block) = e.children.map(blockString).mkString("\n   ")

@@ -21,7 +21,7 @@ import br.gov.lexml.parser.pl.block.Table
 
 object App extends App {
 
-  val inTXT = HelperIO.conteudoLei("PRT834-2016-Validation.txt")
+  val inTXT = HelperIO.conteudoLei("Omissis.txt")
   val txt = scala.io.Source.fromInputStream(inTXT).getLines().toList
   val txtParagraphList = txt.map(x=> Paragraph(Seq(Text(x))))
 
@@ -43,7 +43,7 @@ object App extends App {
   println
   println("Match em articulacao:")
   MatchArticulacao.blocksString(articulacao).foreach(println)  
-
+  
   def printParseProblem(x: ParseProblem) = {
     println ("msg: " + x.msg
         + "; posição: " + x.pos.mkString(" ")
